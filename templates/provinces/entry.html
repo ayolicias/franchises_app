@@ -9,6 +9,13 @@
     <body>
         <div class="container">
             <div class="row">
+                <div class="col-md-12">
+                    <ul class="breadcrumb breadcrumb-default">
+                         <li><a href="{{ url_for('provinces_index') }}">Back to Provinces</a></li>
+                         <li>&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                         <li><a href="{{ url_for('index') }}" >Back to Dashboard</a></li></li>
+                     </ul> 
+                 </div>
                 <br/><p></p>
             </div>
             <div class="row">
@@ -18,16 +25,13 @@
                             <h4 class="card-title">New Province</h4>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="{{ url_for('provinces_insert') }}">
-                                <div class="mb-3">
-                                    <label for="proname" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="proname" name="proname" placeholder="Name of Province">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="prodesc" class="form-label">Description <span class="text-muted">(Optional)</span></label>
-                                    <textarea class="form-control" id="prodesc" name="prodesc" rows="3"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-lg btn-primary">Add Province</button>
+                            <form>
+                                <div class="form-group">
+                                    <label for="my_name">Edit Province</label>
+                                    <input type="text" id="my_name" class="form-control" />
+                                </div>   
+                                <input type="submit" class="btn btn-success" value="Save New Province" />
+                                <input type="submit" class="btn btn-danger" value="Cancel" />
                             </form>
                             <p></p>
                             {% for message in get_flashed_messages() %}

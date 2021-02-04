@@ -1,9 +1,35 @@
 <html>
     <head>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='DataTables/datatables.min.css') }}"/>
+        <script type="text/javascript" src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+        <script>
+
+                $(document).ready( function () {
+                    $('#mytable').DataTable({
+                        "ajax": {
+                            "url": '{{ url_for("provinces_all") }}',
+                            "dataType": "json",
+                            "dataSrc": "",
+                            "contentType": "application/json"
+                        },
+                        "paging": true,
+                        "ordering": true,
+                        "columns": [
+                            { "data": "pro_name", "defaultContent": "" },
+
+                        ],
+                        "columnDefs": [{
+                            "targets": '_all',
+                            "defaultContent": ""
+                        }]
+                    });
+                } );
+    
+        </script>
     </head>
 
     <body>
@@ -12,54 +38,28 @@
             <h2>Provinces</h2>
             <hr>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <a href="{{ url_for('provinces_add') }}" class="btn btn-success">New Province</a>
                     <a href="{{ url_for('index') }}" class="btn btn-warning">Back to Dashboard</a>
-                </div>
-                <!-- <div class="col-md-6 text-right">
-                    <div class="row g-3"> -->
-                        <!-- <div class="col-auto">
-                            <label for="filt" class="form-label">Sort Records</label> 
-                        </div> -->
-                        <!-- <div class="col-auto">
-                            <select name="filt" id="filt" class="form-control">
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Cancel">Cancel</option>
-
-                            </select>
-                        </div> -->
-                        <!-- <div class="col-auto">
-                            <button class="btn btn-success">Sort Records</button>
-                            <br />
-                        </div> -->
-                    </div>
+                    <p></p>
                 </div>
             </div>
-            <div class="row"></div>
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-stripped">
+                    <table class="table table-stripped" id="mytable" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Province Name</th>
-                                <th>Remarks</th>
-                                <th>....</th>
+                                <th>ALL PROVINCES</th>
+                              
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>...</td>
-                                <td>...</td>
-                                <td>...</td>
-                            </tr>
+                        
                         </tbody>
-                    </table>  
+                    </table>
                 </div>
+                
             </div>
-            
-        </div>
-        
+        </div> 
     </body>
 </html>

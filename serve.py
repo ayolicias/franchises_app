@@ -86,7 +86,6 @@ def franchises_all():
     raw = limp(c)
     return json.dumps(raw)
 
-
 @app.route("/provinces", methods=['GET'])
 def provinces_index():
     return render_template("provinces/home.html")
@@ -102,7 +101,7 @@ def provinces_insert():
     try:
         Province = Base.classes.provinces
         data = request.args.get('proname')
-        rmks = request.args.get('prodesc')
+        # rmks = request.args.get('prodesc')
         if len(data) == 0:
             # Check if no data was passed to the methods
             flash('Oops! No values were specified')
@@ -110,7 +109,7 @@ def provinces_insert():
             count = db.session.query(Province).filter_by(Province.pro_name == data).first()
             if count == 0:
                 # When all data has been specified save it into the database
-                new_province = Province(pro_name=data, remarks=rmks)
+                new_province = Province(pro_name=data)
                 db.session.add(new_province)
                 db.session.commit()
                 flash('Done! Province saved successfully!')
@@ -119,20 +118,19 @@ def provinces_insert():
     except Exception as ex:
         # Show Error when all criteria are not met
         flash('Error! Failed to record province info', str(ex))
-    return render_template("provinces/entry.html")
-
+    return render_template("provinces/")
 
 @app.route("/provinces/delete", methods=['POST'])
 def provinces_del():
     return "Provinces Delete"
 
-
 @app.route("/provinces/all", methods=['GET'])
 def provinces_all():
-    Province = Base.classes.provinces
-    data = db.session.query(Province).all()
-    data = ramp(data)
-    return jsonify({'data': data})
-
+    table_reflection = db.Table("provinces", db.metadata, autoload=True, autoload_with=db.engine)
+    attrs = {"__table__": table_reflection}
+    Provinces = type("table_name", (db.Model,), attrs)
+    c = Provinces.query.all()
+    raw = limp(c)
+    return json.dumps(raw)
 if __name__ == "__main__":
     app.run(debug=True)
