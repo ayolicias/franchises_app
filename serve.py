@@ -100,7 +100,7 @@ def provinces_add():
 def provinces_insert():
     try:
         Province = Base.classes.provinces
-        data = request.args.get('proname')
+        data = request.args.get('pro_name')
         # rmks = request.args.get('prodesc')
         if len(data) == 0:
             # Check if no data was passed to the methods
