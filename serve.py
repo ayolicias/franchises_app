@@ -61,20 +61,42 @@ def dashboard_metric():
 def franchises_index():
     return render_template("franchises/home.html")
 
-
 @app.route("/franchises/entry", methods=['GET'])
 def franchises_add():
     return render_template("franchises/entry.html")
-
 
 @app.route("/franchises/delete", methods=['POST'])
 def franchises_del():
     return "Franchise Delete"
 
-
 @app.route("/franchises/add", methods=['POST'])
 def franchises_edit():
     return "Franchises Edit"
+
+
+    @app.route('/franchises/add', methods=['POST'])
+    def franchises_insert():
+    
+        Franchises = Base.classes.franchises
+        data = request.args.get('province_id')
+        # rmks = request.args.get('prodesc')
+        if len(data) == 0:
+            # Check if no data was passed to the methods
+            flash('Oops! No values were specified')
+        else:
+            count = db.session.query(Franchises).filter_by(Franchises.province_id == data).first()
+            if count == 0:
+                # When all data has been specified save it into the database
+                new_franchise = Franchises(province_id=data)
+                db.session.add(new_franchise)
+                db.session.commit()
+                flash('Done! Province saved successfully!')
+            else:
+                flash('Oops! Province record already exist')
+    # except Exception as ex:
+        # Show Error when all criteria are not met
+        flash('Error! Failed to record province info', str(ex))
+    return render_template("provinces/")
 
 
 @app.route("/franchises/all", methods=['GET'])
@@ -124,6 +146,10 @@ def provinces_insert():
 def provinces_del():
     return "Provinces Delete"
 
+@app.route("/franchises/add", methods=['POST'])
+def provinces_edit():
+    return "Province Edit"
+
 @app.route("/provinces/all", methods=['GET'])
 def provinces_all():
     table_reflection = db.Table("provinces", db.metadata, autoload=True, autoload_with=db.engine)
@@ -132,5 +158,6 @@ def provinces_all():
     c = Provinces.query.all()
     raw = limp(c)
     return json.dumps(raw)
+
 if __name__ == "__main__":
     app.run(debug=True)
