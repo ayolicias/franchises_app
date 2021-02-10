@@ -73,31 +73,6 @@ def franchises_del():
 def franchises_edit():
     return "Franchises Edit"
 
-
-    @app.route('/franchises/add', methods=['POST'])
-        def franchises_insert():
-    
-        Franchises = Base.classes.franchises
-        data = request.args.get('province_id')
-        if len(data) == 0:
-            # Check if no data was passed to the methods
-            flash('Oops! No values were specified')
-        else:
-            count = db.session.query(Franchises).filter_by(Franchises.province_id == data).first()
-            if count == 0:
-                # When all data has been specified save it into the database
-                new_franchise = Franchises(province_id=data)
-                db.session.add(new_franchise)
-                db.session.commit()
-                flash('Done! Province saved successfully!')
-            else:
-                flash('Oops! Province record already exist')
-    # except Exception as ex:
-        # Show Error when all criteria are not met
-        flash('Error! Failed to record province info', str(ex))
-    return render_template("franchise/")
-
-
 @app.route("/franchises/all", methods=['GET'])
 def franchises_all():
     table_reflection = db.Table("franchises", db.metadata, autoload=True, autoload_with=db.engine)
@@ -140,6 +115,35 @@ def provinces_insert():
         # Show Error when all criteria are not met
         flash('Error! Failed to record province info', str(ex))
     return render_template("provinces/")
+
+@app.route('/provinces/add', methods=['POST'])
+def insert_province(pro_name):
+    query = "INSERT INTO provinces(pro_name) " \
+            "VALUES(%s,%s)"
+    args = (pro_name)
+
+    try:
+        db_config = read_db_config()
+        conn = 'mysql+pymysql://root:demo@localhost/franchises'
+
+        cursor = conn.cursor()
+        cursor.execute(query, args)
+
+        if cursor.lastrowid:
+            print('last insert id', cursor.lastrowid)
+        else:
+            print('last insert id not found')
+
+        conn.commit()
+    except Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        conn.close()
+
+def main():
+   insert_province('Western Cape')
 
 @app.route("/provinces/delete", methods=['POST'])
 def provinces_del():
