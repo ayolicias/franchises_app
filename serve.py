@@ -75,11 +75,10 @@ def franchises_edit():
 
 
     @app.route('/franchises/add', methods=['POST'])
-    def franchises_insert():
+        def franchises_insert():
     
         Franchises = Base.classes.franchises
         data = request.args.get('province_id')
-        # rmks = request.args.get('prodesc')
         if len(data) == 0:
             # Check if no data was passed to the methods
             flash('Oops! No values were specified')
@@ -96,7 +95,7 @@ def franchises_edit():
     # except Exception as ex:
         # Show Error when all criteria are not met
         flash('Error! Failed to record province info', str(ex))
-    return render_template("provinces/")
+    return render_template("franchise/")
 
 
 @app.route("/franchises/all", methods=['GET'])
