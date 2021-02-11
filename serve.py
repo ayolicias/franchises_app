@@ -116,35 +116,6 @@ def provinces_insert():
         flash('Error! Failed to record province info', str(ex))
     return render_template("provinces/")
 
-@app.route('/provinces/add', methods=['POST'])
-def insert_province(pro_name):
-    query = "INSERT INTO provinces(pro_name) " \
-            "VALUES(%s,%s)"
-    args = (pro_name)
-
-    try:
-        db_config = read_db_config()
-        conn = 'mysql+pymysql://root:demo@localhost/franchises'
-
-        cursor = conn.cursor()
-        cursor.execute(query, args)
-
-        if cursor.lastrowid:
-            print('last insert id', cursor.lastrowid)
-        else:
-            print('last insert id not found')
-
-        conn.commit()
-    except Error as error:
-        print(error)
-
-    finally:
-        cursor.close()
-        conn.close()
-
-def main():
-   insert_province('Western Cape')
-
 @app.route("/provinces/delete", methods=['POST'])
 def provinces_del():
     return "Provinces Delete"
