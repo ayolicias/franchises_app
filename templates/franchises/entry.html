@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-12">
                    <ul class="breadcrumb breadcrumb-default">
-                    <img src="https://media-exp1.licdn.com/dms/image/C4E1BAQFOdA_ed100zQ/company-background_10000/0/1585148387862?e=1615536000&v=beta&t=lEbM8M7Cdicd6fziNLH4KpJ4gJoJfwdi6N0LvNKgWKY"class="img-fluid" alt="responsive image"/>
+                    <img src="https://media-exp1.licdn.com/dms/image/C4E1BAQFOdA_ed100zQ/company-background_10000/0/1585148387862?e=1615982400&v=beta&t=UJ7V9sTWA-5skeZU0rl_omJoff80PNW12MraD2n816Y"class="img-fluid" alt="responsive image"/>
 
                         <li><a href="{{ url_for('franchises_index') }}">Back to Franchises</a></li>
                         <li>&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;</li>
@@ -24,17 +24,23 @@
                     <div class="col-md-8">
                         <div class="card mb-3">
                             <div class="card-header">
-                                <h4 class="card-title">New Franchise</h4>
+                                <h4 class="card-title">New Franchises</h4>
                             </div>
-                            <div class="card-body">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="my_name">Notify new Franchises</label>
-                                        <input type="text" id="my_name" class="form-control" />
-                                    </div>  
-                                    <a input type="submit" class="btn btn-danger" href="mailto:supportagent1@credit-rescue.co.za">New Franchise</a>
 
-                                </form>
+                            <div class="card-body">
+                                <form method="POST" action="" enctype="multipart/form-data">          
+                                   <p><input type="file" name="file"></p>
+                                   <p><input type="submit" value="Submit" href="mailto:supportagent1@credit-rescue.co.za"></a></p>
+                                   </form> 
+
+                                    <div class="form-group">
+                                    <!-- <p>GET IN TOUCH </p> -->
+                                    <P>QUERY FOR NEW FRANCHISES</P>
+                                    <a input type="submit" class="btn btn-danger" href="mailto:supportagent1@credit-rescue.co.za">GET IN TOUCH </a>
+                                    </div>  
+
+                            </div>
+                                   
                                 <p></p>
                                 {% for message in get_flashed_messages() %}
                                     <p class="alert alert-warning" role="alert">{{ message }}</p>

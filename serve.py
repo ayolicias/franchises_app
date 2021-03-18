@@ -7,6 +7,27 @@ from sqlalchemy import inspect
 import json
 import imghdr
 import smtplib
+import os 
+  
+# @app.route('/home', methods=['GET', 'POST'])
+# def home():
+#     if request.method == 'POST':
+#         date = request.attachments['date']
+#         title = request.attachments['blog_title']
+#         post = request.attachments['blog_main']
+#         post_home = models.BlogPost(date = date, title = title, post = post)
+#         db.session.add(post_entry)
+#         db.session.commit()
+#         return redirect(url_for('franchises'))
+#     else:
+#         return render_template('home.html')
+
+# @app.route('/attachments')        
+# def attachments():
+#     query = []
+#     for i in session.query(models.BlogPost):
+#         query.append((i.title, i.post, i.date))
+#     return render_template('home.html', query = query)
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 app = Flask(__name__)
 app.secret_key = '99d0*93/>-23@#'
@@ -60,6 +81,7 @@ def dashboard_metric():
 def franchises_index():
     return render_template("franchises/home.html")
 
+
 @app.route("/attachments", methods=['GET'])
 def attachments_index():
     return render_template("attachments/home.html")
@@ -85,6 +107,15 @@ def franchises_all():
     raw = limp(c)
     return json.dumps(raw)
 
+# @app.route("/attachments/all", methods=['GET'])
+# def attachments_all():
+#     table_reflection = db.Table("attachments", db.metadata, autoload=True, autoload_with=db.engine)
+#     attrs = {"__table__": table_reflection}
+#     Attachhments = type("table_name", (db.Model,), attrs)
+#     c = Attachhments.query.all()
+#     raw = limp(c)
+#     return json.dumps(raw)
+
 @app.route("/provinces", methods=['GET'])
 def provinces_index():
     return render_template("provinces/home.html")
@@ -94,30 +125,29 @@ def provinces_index():
 def provinces_add():
     return render_template("provinces/entry.html")
 
-
-@app.route('/provinces/add', methods=['POST'])
-def provinces_insert():
-    try:
-        Province = Base.classes.provinces
-        data = request.args.get('pro_name')
-        # rmks = request.args.get('prodesc')
-        if len(data) == 0:
-            # Check if no data was passed to the methods
-            flash('Oops! No values were specified')
-        else:
-            count = db.session.query(Province).filter_by(Province.pro_name == data).first()
-            if count == 0:
-                # When all data has been specified save it into the database
-                new_province = Province(pro_name=data)
-                db.session.add(new_province)
-                db.session.commit()
-                flash('Done! Province saved successfully!')
-            else:
-                flash('Oops! Province record already exist')
-    except Exception as ex:
-        # Show Error when all criteria are not met
-        flash('Error! Failed to record province info', str(ex))
-    return render_template("provinces/")
+# @app.route('/provinces/add', methods=['POST'])
+# def provinces_insert():
+#     try:
+#         Province = Base.classes.provinces
+#         data = request.args.get('pro_name')
+#         # rmks = request.args.get('prodesc')
+#         if len(data) == 0:
+#             # Check if no data was passed to the methods
+#             flash('Oops! No values were specified')
+#         else:
+#             count = db.session.query(Province).filter_by(Province.pro_name == data).first()
+#             if count == 0:
+#                 # When all data has been specified save it into the database
+#                 new_province = Province(pro_name=data)
+#                 db.session.add(new_province)
+#                 db.session.commit()
+#                 flash('Done! Province saved successfully!')
+#             else:
+#                 flash('Oops! Province record already exist')
+#     except Exception as ex:
+#         # Show Error when all criteria are not met
+#         flash('Error! Failed to record province info', str(ex))
+#     return render_template("provinces/")
 
 @app.route("/provinces/delete", methods=['POST'])
 def provinces_del():
@@ -127,9 +157,9 @@ def provinces_del():
 def provinces_edit():
     return "Province Edit"
 
-@app.route("/attachments/index", methods=['POST'])
+@app.route("/attachments/all", methods=['POST'])
 def attachments_all():
-    return "attachments home"
+    return "Attachments All"
 
 @app.route("/provinces/all", methods=['GET'])
 def provinces_all():
