@@ -9,11 +9,9 @@ import imghdr
 import smtplib
 import os 
 import requests
+import sqlite3
 
-# django
-# gunicorn
-# django-heroku
-# requests
+
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 app = Flask(__name__)
 app.secret_key = '99d0*93/>-23@#'
@@ -27,6 +25,12 @@ def as_dict(row):
     data = vars(row)
     del data['_sa_instance_state']
     return data
+
+def convert_into_binary(file_path):
+    with open(file_path, 'rb') as file:
+        binary = file.read()
+
+    return binary
 
 def ramp(row):
     raw = None
@@ -52,15 +56,77 @@ def limp(row):
             bulk.append(raw)
     return bulk
 
+def sqlite_connect(franchises):
+
+    try:
+        # Create a connection
+        conn = sqlite3.connect(franchises)
+    except sqlite3.Error:
+        print(f"Error connecting to the database '{franchises}'")
+    finally:
+        return conn
+
+def insert_file(entry, franchises):
+    try:
+        # Establish a connection
+        connection = sqlite_connect(franchises)
+        print(f"Connected to the database `{franchises}`")
+
+        # Create a cursor object
+        cursor = connection.cursor()
+
+        sqlite_insert_blob_query = f"""
+        INSERT INTO {attachments} (upload_id, id) VALUES (pdf, 1)
+        """
+
+        # Convert the file into binary
+        binary_file = convert_into_binary(entry)
+        data_tuple = (entry, binary_file)
+
+        # Execute the query
+        cursor.execute(sqlite_insert_blob_query, data_tuple)
+        connection.commit()
+        print('File inserted successfully')
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert blob into the table", error)
+    finally:
+        if connection:
+            connection.close()
+            print("Connection closed")
+
+def write_to_file(binary_code, attachments):
+    # Convert binary to a proper file and store in memory
+    with open(attachments, 'wb') as file:
+        file.write(binary_code)
+    print(f'Created file with name: {attachments}')
+
+def retrieve_file(upload, franchises, attachments):
+    try:
+        # Establish a connection
+        connection = sqlite_connect(franchises)
+        print(f"Connected to the database `{franchises}`")
+
+        # Create a cursor object
+        cursor = connection.cursor()
+
+        sql_retrieve_file_query = f"""SELECT * FROM {attachments} WHERE name = file_id, id"""
+        cursor.execute(sql_retrieve_file_query, (franchises/entry))
+
+        # Retrieve results in a tuple
+        record = cursor.fetchone()
+        # Save to a file
+        write_to_file(record[1], record[0])
+    except sqlite3.Error as error:
+        print("Failed to insert blob into the table", error)
+    finally:
+        if connection:
+            connection.close()
+            print("Connection closed")
+
 @app.route("/", methods=['GET'])
 def index():
     return render_template("dashboard/index.html")
-
-# @app.router("/franchises/entry", method =['POST'])
-# def index(request):
-#     r = requests.get('http://httpbin.org/status/418')
-#     print(r.text)
-#     return ("franchises/entry.html")
 
 @app.route("/dashboard/metrics", methods=['GET'])
 def dashboard_metric():
