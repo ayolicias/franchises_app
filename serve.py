@@ -8,27 +8,13 @@ import json
 import imghdr
 import smtplib
 import os 
-  
-# @app.route('/home', methods=['GET', 'POST'])
-# def home():
-#     if request.method == 'POST':
-#         date = request.attachments['date']
-#         title = request.attachments['blog_title']
-#         post = request.attachments['blog_main']
-#         post_home = models.BlogPost(date = date, title = title, post = post)
-#         db.session.add(post_entry)
-#         db.session.commit()
-#         return redirect(url_for('franchises'))
-#     else:
-#         return render_template('home.html')
+import requests
 
-# @app.route('/attachments')        
-# def attachments():
-#     query = []
-#     for i in session.query(models.BlogPost):
-#         query.append((i.title, i.post, i.date))
-#     return render_template('home.html', query = query)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+# django
+# gunicorn
+# django-heroku
+# requests
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 app = Flask(__name__)
 app.secret_key = '99d0*93/>-23@#'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:demo@localhost/franchises'
@@ -70,6 +56,12 @@ def limp(row):
 def index():
     return render_template("dashboard/index.html")
 
+# @app.router("/franchises/entry", method =['POST'])
+# def index(request):
+#     r = requests.get('http://httpbin.org/status/418')
+#     print(r.text)
+#     return ("franchises/entry.html")
+
 @app.route("/dashboard/metrics", methods=['GET'])
 def dashboard_metric():
     #Province = Base.classes.provinces
@@ -80,11 +72,6 @@ def dashboard_metric():
 @app.route("/franchises", methods=['GET'])
 def franchises_index():
     return render_template("franchises/home.html")
-
-
-@app.route("/attachments", methods=['GET'])
-def attachments_index():
-    return render_template("attachments/home.html")
 
 @app.route("/franchises/entry", methods=['GET'])
 def franchises_add():
@@ -107,15 +94,6 @@ def franchises_all():
     raw = limp(c)
     return json.dumps(raw)
 
-# @app.route("/attachments/all", methods=['GET'])
-# def attachments_all():
-#     table_reflection = db.Table("attachments", db.metadata, autoload=True, autoload_with=db.engine)
-#     attrs = {"__table__": table_reflection}
-#     Attachhments = type("table_name", (db.Model,), attrs)
-#     c = Attachhments.query.all()
-#     raw = limp(c)
-#     return json.dumps(raw)
-
 @app.route("/provinces", methods=['GET'])
 def provinces_index():
     return render_template("provinces/home.html")
@@ -124,6 +102,12 @@ def provinces_index():
 @app.route("/provinces/entry", methods=['GET'])
 def provinces_add():
     return render_template("provinces/entry.html")
+
+@app.route("/franchises/entry", methods=['GET'])
+def franchises_upload():
+    return render_template("franchises/entry.html")
+
+
 
 # @app.route('/provinces/add', methods=['POST'])
 # def provinces_insert():
@@ -156,10 +140,6 @@ def provinces_del():
 @app.route("/franchises/add", methods=['POST'])
 def provinces_edit():
     return "Province Edit"
-
-@app.route("/attachments/all", methods=['POST'])
-def attachments_all():
-    return "Attachments All"
 
 @app.route("/provinces/all", methods=['GET'])
 def provinces_all():
