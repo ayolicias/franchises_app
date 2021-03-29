@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, url_for, flash, request
+from flask import Flask, render_template, jsonify, url_for, flash, request, redirect
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative.api import DeclarativeMeta
 from sqlalchemy.orm import Session
@@ -164,40 +164,14 @@ def franchises_all():
 def provinces_index():
     return render_template("provinces/home.html")
 
-
 @app.route("/provinces/entry", methods=['GET'])
 def provinces_add():
     return render_template("provinces/entry.html")
 
-@app.route("/franchises/entry", methods=['GET'])
-def franchises_upload():
-    return render_template("franchises/entry.html")
 
-
-
-# @app.route('/provinces/add', methods=['POST'])
-# def provinces_insert():
-#     try:
-#         Province = Base.classes.provinces
-#         data = request.args.get('pro_name')
-#         # rmks = request.args.get('prodesc')
-#         if len(data) == 0:
-#             # Check if no data was passed to the methods
-#             flash('Oops! No values were specified')
-#         else:
-#             count = db.session.query(Province).filter_by(Province.pro_name == data).first()
-#             if count == 0:
-#                 # When all data has been specified save it into the database
-#                 new_province = Province(pro_name=data)
-#                 db.session.add(new_province)
-#                 db.session.commit()
-#                 flash('Done! Province saved successfully!')
-#             else:
-#                 flash('Oops! Province record already exist')
-#     except Exception as ex:
-#         # Show Error when all criteria are not met
-#         flash('Error! Failed to record province info', str(ex))
-#     return render_template("provinces/")
+@app.route("/upload_files/uploads", methods=['GET'])
+def upload_files_upload():
+    return ("/upload_files/upload.html")
 
 @app.route("/provinces/delete", methods=['POST'])
 def provinces_del():
@@ -213,6 +187,15 @@ def provinces_all():
     attrs = {"__table__": table_reflection}
     Provinces = type("table_name", (db.Model,), attrs)
     c = Provinces.query.all()
+    raw = limp(c)
+    return json.dumps(raw)
+
+@app.route("/upload_files/all", methods=['GET'])
+def upload_files_all():
+    table_reflection = db.Table("upload_files", db.metadata, autoload=True, autoload_with=db.engine)
+    attrs = {"__table__": table_reflection}
+    Provinces = type("table_name", (db.Model,), attrs)
+    c = Upload_files.query.all()
     raw = limp(c)
     return json.dumps(raw)
 
