@@ -176,23 +176,23 @@ def provinces_del():
 def provinces_edit():
     return "Province Edit"
 
-@app.route('/franchises/entry', methods=['GET', 'POST'])
-def franchises_entry():
-    if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
-        rec = Photo(filename=filename, user=g.user.id)
-        rec.store()
-        flash("Photo saved.")
-        return redirect(url_for('show', id=rec.id))http://127.0.0.1:5000/ 
-    return render_template('/franchises/entry.html')
+# @app.route('/franchises/entry', methods=['GET', 'POST'])
+# def franchises_entry():
+#     if request.method == 'POST' and 'photo' in request.files:
+#         filename = photos.save(request.files['photo'])
+#         rec = Photo(filename=filename, user=g.user.id)
+#         rec.store()
+#         flash("Photo saved.")
+#         return redirect(url_for('show', id=rec.id))
+#     return render_template('/franchises/entry.html')
 
-@app.route('/franchises/entry<id>')
-def entry(id):
-    photo = Photo.load(id)
-    if photo is None:
-        abort(404)
-    url = photos.url(photo.filename)
-    return render_template('/franchises/entry.html', url=url, photo=photo)
+# @app.route('/franchises/entry<id>')
+# def entry(id):
+#     photo = Photo.load(id)
+#     if photo is None:
+#         abort(404)
+#     url = photos.url(photo.filename)
+#     return render_template('/franchises/entry.html', url=url, photo=photo)
 
     media = UploadSet('media', default_dest=lambda app: app.instance_root)
     configure_uploads(app, (photos, media))
