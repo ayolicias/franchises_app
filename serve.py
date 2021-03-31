@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, url_for, flash, request, redirect
+from flask import Flask, render_template, jsonify, url_for, flash, requests, redirect
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative.api import DeclarativeMeta
 from sqlalchemy.orm import Session
@@ -194,10 +194,15 @@ def provinces_edit():
 #     url = photos.url(photo.filename)
 #     return render_template('/franchises/entry.html', url=url, photo=photo)
 
-    media = UploadSet('media', default_dest=lambda app: app.instance_root)
-    configure_uploads(app, (photos, media))
-    patch_request_class(app)        
-    patch_request_class(app, 32 * 1024 * 1024)
+    # media = UploadSet('media', default_dest=lambda app: app.instance_root)
+    # configure_uploads(app, (photos, media))
+    # patch_request_class(app)        
+    # patch_request_class(app, 32 * 1024 * 1024)
+
+    def index(request):
+    r = requests.get('http://httpbin.org/status/418')
+    print(r.text)
+    return HttpResponse('<pre>' + r.text + '</pre>')
  
 @app.route("/provinces/all", methods=['GET'])
 def provinces_all():
