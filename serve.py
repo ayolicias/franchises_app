@@ -11,6 +11,8 @@ import os.path
 import requests
 import sqlite3
 import posixpath
+import django_heroku
+
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 app = Flask(__name__)
 app.secret_key = '99d0*93/>-23@#'
