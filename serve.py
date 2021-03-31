@@ -223,6 +223,8 @@ def upload_files_all():
     c = Upload_files.query.all()
     raw = limp(c)
     return json.dumps(raw)
+    
+django_heroku.settings(locals())
 
 if __name__ == "__main__":
     app.run(debug=True)
