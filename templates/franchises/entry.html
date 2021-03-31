@@ -5,13 +5,37 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    </head>
+        <script>
+            $(document).ready( function () {
+                $('#mytable').DataTable({
+                    "ajax": {
+                        "url": '{{ url_for("franchises_all") }}',
+                        "dataType": "json",
+                        "dataSrc": "",
+                        "contentType": "application/json"
+                    },
+                    "paging": true,
+                    "ordering": true,
+                    "columns": [
+                        { "data": "uploaded", "defaultContent": "" }
+                       
+                    ],
+                    "columnDefs": [{
+                        "targets": '_all',
+                        "defaultContent": ""
+                    }]
+                });
+            } );
+
+    </script>
+</head>
     <body>
+
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                    <ul class="breadcrumb breadcrumb-default">
-                    <img src="https://media-exp1.licdn.com/dms/image/C4E1BAQFOdA_ed100zQ/company-background_10000/0/1585148387862?e=1616666400&v=beta&t=bs6lan4JJQklgmbmbB3QYmzw-00F4qhzsH-TJVl-dm0"class="img-fluid" alt="responsive image"/>
+                    <img src="https://media-exp1.licdn.com/dms/image/C4E1BAQFOdA_ed100zQ/company-background_10000/0/1585148387862?e=1617202800&v=beta&t=nEXl-G4BV4RdibQHGm-7ikmCIgFYqMqG7UKCWK_-I68"class="img-fluid" alt="responsive image"/>
 
                         <li><a href="{{ url_for('franchises_index') }}">Back to Franchises</a></li>
                         <li>&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;</li>
@@ -27,13 +51,14 @@
                                 <h4 class="card-title">New Franchises</h4>
                             </div>
 
+                            <form method=POST enctype=multipart/form-data action="{{ url_for('franchises_entry') }}"> 
+                            <p><input type="file" name="file"></p> 
+                            <p><input type="submit" class="btn btn-danger" value="SUBMIT"> </p>
 
-                                <div class="form-group">
-                                    <p><input type="file" name="file"></p>
-                                    <p><input type="submit" value="Submit"></a></p>
-                                    
+                            </form>                                                                                                                                                                                                           
                                     <P>QUERY FOR NEW FRANCHISES</P>
                                     <a input type="submit" class="btn btn-danger" href="mailto:supportagent1@credit-rescue.co.za">GET IN TOUCH </a>
+                                </form>
                                 </div>  
                                                           
                                 <p></p>
@@ -49,6 +74,8 @@
                 </div>
                 
             </div>
+        </div>
+        <div class="row">     
         </div>
     </body>
 </html>

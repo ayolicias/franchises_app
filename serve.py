@@ -7,12 +7,11 @@ from sqlalchemy import inspect
 import json
 import imghdr
 import smtplib
-import os 
+import os.path
 import requests
 import sqlite3
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+import posixpath
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 app = Flask(__name__)
 app.secret_key = '99d0*93/>-23@#'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:demo@localhost/franchises'
@@ -20,6 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 Base = automap_base()
 Base.prepare(db.engine, reflect=True)
+  
 
 def as_dict(row):
     data = vars(row)
@@ -168,11 +168,6 @@ def provinces_index():
 def provinces_add():
     return render_template("provinces/entry.html")
 
-
-@app.route("/upload_files/uploads", methods=['GET'])
-def upload_files_upload():
-    return ("/upload_files/upload.html")
-
 @app.route("/provinces/delete", methods=['POST'])
 def provinces_del():
     return "Provinces Delete"
@@ -181,6 +176,29 @@ def provinces_del():
 def provinces_edit():
     return "Province Edit"
 
+@app.route('/franchises/entry', methods=['GET', 'POST'])
+def franchises_entry():
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        rec = Photo(filename=filename, user=g.user.id)
+        rec.store()
+        flash("Photo saved.")
+        return redirect(url_for('show', id=rec.id))http://127.0.0.1:5000/ 
+    return render_template('/franchises/entry.html')
+
+@app.route('/franchises/entry<id>')
+def entry(id):
+    photo = Photo.load(id)
+    if photo is None:
+        abort(404)
+    url = photos.url(photo.filename)
+    return render_template('/franchises/entry.html', url=url, photo=photo)
+
+    media = UploadSet('media', default_dest=lambda app: app.instance_root)
+    configure_uploads(app, (photos, media))
+    patch_request_class(app)        
+    patch_request_class(app, 32 * 1024 * 1024)
+ 
 @app.route("/provinces/all", methods=['GET'])
 def provinces_all():
     table_reflection = db.Table("provinces", db.metadata, autoload=True, autoload_with=db.engine)
